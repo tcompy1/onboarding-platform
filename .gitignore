@@ -26,5 +26,10 @@ build/
 .vscode/
 
 
-# project guides
-guides/
+# Project guides and documentation (keep private)
+Guides/
+*_GUIDE.md
+*_HELP.md
+TROUBLESHOOTING.md
+DATABASE_SETUP_HELP.md
+REFACTORING_GUIDE.md
