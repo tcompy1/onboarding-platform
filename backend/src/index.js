@@ -1,7 +1,7 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+const express = require('express');
+const bodyParser = require('body-parser');
+require('dotenv').config();
 
-// Import routes
 const applicationRoutes = require('./routes/applications');
 
 const app = express();
@@ -9,20 +9,34 @@ const app = express();
 // Middleware
 app.use(bodyParser.json());
 
-// Health check endpoint
-app.get("/health", (req, res) => {
-    res.json({status: "ok"});
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Application routes
-app.use('/applications', applicationRoutes); // Public endpoint for creating
-app.use('/admin/applications', applicationRoutes); // Admin endpoint for viewing
+// Routes
+app.use('/applications', applicationRoutes);
+app.use('/admin/applications', applicationRoutes);
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({ 
+    error: 'Internal server error',
+    message: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+});
 
 // Start server
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📝 Environment: ${process.env.NODE_ENV}`);
 });
 
-//Export for testing (we'll use this later)
-module.exports = app;
+module.exports = app; // For testing

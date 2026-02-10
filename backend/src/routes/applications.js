@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const applicationController = require('../controllers/applicationControllers');
 
-// POST /applications - Create new application
+// Public routes
 router.post('/', applicationController.createApplication);
 
-// GET /applications - Get all applications (will be used for admin)
+// Admin routes (will be protected later)
 router.get('/', applicationController.getAllApplications);
+router.get('/:id', applicationController.getApplicationById);
+router.put('/:id/status', applicationController.updateApplicationStatus);
 
 module.exports = router;
